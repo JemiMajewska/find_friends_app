@@ -7,12 +7,9 @@ from openai import OpenAI
 from dotenv import dotenv_values
 import matplotlib.pyplot as plt
 import numpy as np
+from qdrant_client import QdrantClient
+from qdrant_client.models import PointStruct, Distance, VectorParams
 
-@st.cache_resourcedef get_qdrant_client():
-return QdrantClient(
-    url=env["QDRANT_URL"],
-    api_key=env["QDRANT_API_KEY"],
-)
 
 # Uzyjemy nowych danych v2:
 df = pd.read_csv('welcome_survey_simple_v2.csv', sep=';')
