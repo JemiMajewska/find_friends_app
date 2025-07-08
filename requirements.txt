@@ -1,0 +1,10 @@
+openai
+python-dotenv
+qdrant-client
+streamlit
+pydub
+pandas
+pycaret
+plotly
+matplotlib
+numpy
