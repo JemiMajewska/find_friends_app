@@ -35,11 +35,6 @@ kmeans_pipeline = load_model('welcome_survey_clustering_pipeline_v2')
 df_with_clusters = predict_model(model=kmeans_pipeline, data=df)
 df_with_clusters["Cluster"].value_counts()
 
-
-# Preparing clusters and cluster descriptions
-env = dotenv_values(".env")
-openai_client = OpenAI(api_key=env["OPENAI_API_KEY"])
-
 # Stworzymy prompt, dla LLM-a w celu znalezienia odpowiednich nazw i opisów dla klastrów
 cluster_descriptions = {}
 for cluster_id in df_with_clusters['Cluster'].unique():
