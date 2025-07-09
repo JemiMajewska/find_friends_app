@@ -10,6 +10,15 @@ import numpy as np
 from qdrant_client import QdrantClient
 from qdrant_client.models import PointStruct, Distance, VectorParams
 
+env = dotenv_values(".env")
+if 'QDRANT_URL' in st.secrets:
+    env['QDRANT_URL'] = st.secrets['QDRANT_URL']
+if 'QDRANT_API_KEY' in st.secrets:
+    env['QDRANT_API_KEY'] = st.secrets['QDRANT_API_KEY']
+
+
+def get_openai_client():
+    return OpenAI(api_key=st.session_state["openai_api_key"])
 
 # Uzyjemy nowych danych v2:
 df = pd.read_csv('welcome_survey_simple_v2.csv', sep=';')
