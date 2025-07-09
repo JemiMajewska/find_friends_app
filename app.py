@@ -72,16 +72,7 @@ Użyj formatu JSON. Przykładowo:
 """
 print(prompt)
 
-response = openai_client.chat.completions.create(
-    model="gpt-4o",
-    temperature=0,
-    messages=[
-        {
-            "role": "user",
-            "content": [{"type": "text", "text": prompt}],
-        }
-    ],
-)
+
 
 result = response.choices[0].message.content.replace("```json", "").replace("```", "").strip()
 cluster_names_and_descriptions = json.loads(result)
