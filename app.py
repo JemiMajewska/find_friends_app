@@ -18,7 +18,7 @@ if 'QDRANT_API_KEY' in st.secrets:
 
 
 def get_openai_client():
-    return OpenAI(api_key=st.session_state["openai_api_key"])
+    return OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Uzyjemy nowych danych v2:
 df = pd.read_csv('welcome_survey_simple_v2.csv', sep=';')
