@@ -74,7 +74,8 @@ print(prompt)
 
 
 
-
+result = response.choices[0].message.content.replace("```json", "").replace("```", "").strip()
+cluster_names_and_descriptions = json.loads(result)
 
 with open("welcome_survey_cluster_names_and_descriptions_v2.json", "w") as f:
     f.write(json.dumps(cluster_names_and_descriptions))
