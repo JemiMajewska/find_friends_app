@@ -18,7 +18,33 @@ if 'QDRANT_API_KEY' in st.secrets:
 
 
 def get_openai_client():
-    return OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    return OpenAI(api_key=st.session_state["openai_api_key"])
+
+
+#
+# MAIN
+#
+st.set_page_config(page_title="Welcome survey results", layout="centered")
+
+# OpenAI API key protection
+if not st.session_state.get("openai_api_key"):
+    if "OPENAI_API_KEY" in env:
+        st.session_state["openai_api_key"] = env["OPENAI_API_KEY"]
+
+    else:
+        st.info("Dodaj swój klucz API OpenAI aby móc korzystać z tej aplikacji")
+        st.session_state["openai_api_key"] = st.text_input("Klucz API", type="password")
+        if st.session_state["openai_api_key"]:
+            st.rerun()
+
+if not st.session_state.get("openai_api_key"):
+    st.stop()
+
+
+
+
+
+
 
 # Uzyjemy nowych danych v2:
 df = pd.read_csv('welcome_survey_simple_v2.csv', sep=';')
@@ -34,6 +60,11 @@ save_model(kmeans, 'welcome_survey_clustering_pipeline_v2', verbose=False)
 kmeans_pipeline = load_model('welcome_survey_clustering_pipeline_v2')
 df_with_clusters = predict_model(model=kmeans_pipeline, data=df)
 df_with_clusters["Cluster"].value_counts()
+
+
+# Preparing clusters and cluster descriptions
+env = dotenv_values(".env")
+openai_client = OpenAI(api_key=env["OPENAI_API_KEY"])
 
 # Stworzymy prompt, dla LLM-a w celu znalezienia odpowiednich nazw i opisów dla klastrów
 cluster_descriptions = {}
@@ -72,9 +103,18 @@ Użyj formatu JSON. Przykładowo:
 """
 print(prompt)
 
+response = openai_client.chat.completions.create(
+    model="gpt-4o",
+    temperature=0,
+    messages=[
+        {
+            "role": "user",
+            "content": [{"type": "text", "text": prompt}],
+        }
+    ],
+)
 
-
-#result = response.choices[0].message.content.replace("```json", "").replace("```", "").strip()
+result = response.choices[0].message.content.replace("```json", "").replace("```", "").strip()
 cluster_names_and_descriptions = json.loads(result)
 
 with open("welcome_survey_cluster_names_and_descriptions_v2.json", "w") as f:
