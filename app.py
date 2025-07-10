@@ -114,6 +114,7 @@ response = openai_client.chat.completions.create(
     ],
 )
 
+
 result = response.choices[0].message.content.replace("```json", "").replace("```", "").strip()
 cluster_names_and_descriptions = json.loads(result)
 
