@@ -1,4 +1,4 @@
 .env
 *.log
 .streamlit/secrets.toml
-secrets
+secrets.toml
