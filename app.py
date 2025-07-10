@@ -63,8 +63,8 @@ df_with_clusters["Cluster"].value_counts()
 
 
 # Preparing clusters and cluster descriptions
-env = dotenv_values(".env")
-openai_client = OpenAI(api_key=env["OPENAI_API_KEY"])
+
+openai_client = get_openai_client()
 
 # Stworzymy prompt, dla LLM-a w celu znalezienia odpowiednich nazw i opisów dla klastrów
 cluster_descriptions = {}
