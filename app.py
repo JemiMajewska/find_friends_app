@@ -18,7 +18,11 @@ if 'QDRANT_API_KEY' in st.secrets:
 
 
 def get_openai_client():
-    return OpenAI(api_key=st.session_state["openai_api_key"])
+    key = st.session_state.get("openai_api_key")
+    if not key:
+        st.warning("Brakuje klucza OpenAI API.")
+        st.stop()
+    return OpenAI(api_key=key)
 
 
 #
@@ -41,11 +45,6 @@ if not st.session_state.get("openai_api_key"):
     st.stop()
 
 
-
-
-
-
-
 # Uzyjemy nowych danych v2:
 df = pd.read_csv('welcome_survey_simple_v2.csv', sep=';')
 s = setup(df, session_id=123)
@@ -61,10 +60,6 @@ kmeans_pipeline = load_model('welcome_survey_clustering_pipeline_v2')
 df_with_clusters = predict_model(model=kmeans_pipeline, data=df)
 df_with_clusters["Cluster"].value_counts()
 
-
-# Preparing clusters and cluster descriptions
-
-openai_client = get_openai_client()
 
 # Stworzymy prompt, dla LLM-a w celu znalezienia odpowiednich nazw i opisów dla klastrów
 cluster_descriptions = {}
@@ -102,6 +97,11 @@ Użyj formatu JSON. Przykładowo:
 }
 """
 print(prompt)
+
+# Preparing clusters and cluster descriptions
+
+openai_client = get_openai_client()
+
 
 response = openai_client.chat.completions.create(
     model="gpt-4o",
