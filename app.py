@@ -51,7 +51,7 @@ s = setup(df, session_id=123)
 s.dataset_transformed.head()
 
 #stworzymy nowy pipeline dla danych v2:
-kmeans = create_model('kmeans', num_clusters=12)
+kmeans = create_model('kmeans', num_clusters=15)
 df_with_clusters = assign_model(kmeans)
 df_with_clusters["Cluster"].value_counts()
 
