@@ -51,7 +51,7 @@ s = setup(df, session_id=123)
 s.dataset_transformed.head()
 
 #stworzymy nowy pipeline dla danych v2:
-kmeans = create_model('kmeans', num_clusters=9)
+kmeans = create_model('kmeans', num_clusters=12)
 df_with_clusters = assign_model(kmeans)
 df_with_clusters["Cluster"].value_counts()
 
@@ -82,7 +82,7 @@ for cluster_id, description in cluster_descriptions.items():
     prompt += f"\n\nKlaster {cluster_id}:\n{description}"
 
 prompt += """
-Wygeneruj najlepsze nazwy dla każdego z klasterów oraz ich opisy
+Wygeneruj najlepsze nazwy dla każdego z klasterów oraz ich opisy, biorąc pod uwagę te same zainteresowania
 
 Użyj formatu JSON. Przykładowo:
 {
