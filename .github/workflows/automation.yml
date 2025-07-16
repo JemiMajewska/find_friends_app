@@ -1,0 +1,16 @@
+name: Run Tests on Push
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: npm install  # Change this command based on your stack
+
+      - name: Run Tests
+        run: npm test     # Or use the relevant test command for your project
